@@ -1,1 +1,6 @@
-{"name":"Fresh User","email":"freshuser@example.com","password":"password123","phone":""}
+{
+  "name": "Fresh User",
+  "email": "freshuser@example.com",
+  "password": "password123",
+  "phone": ""
+}

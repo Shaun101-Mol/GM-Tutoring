@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
   <title>GM Tutoring | Learning Platform</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <div id="toast-root"></div>
 
@@ -49,7 +51,8 @@
             <a href="#" data-action="forgot">Forgot password?</a>
           </div>
           <button class="btn btn-primary btn-lg full" type="submit">Sign In <span>→</span></button>
-        <button class="text-link auth-signup" type="button" data-action="signup">New learner? Create an account →</button>
+          <button class="text-link auth-signup" type="button" data-action="signup">New learner? Create an account
+            →</button>
         </form>
 
         <p class="muted">If this is your first time, create a new learner account below.</p>
@@ -81,11 +84,14 @@
     <main class="main">
       <header class="topbar">
         <button class="mobile-menu icon-btn" data-action="toggle-sidebar">☰</button>
-        <div class="breadcrumbs"><span>GM Tutoring</span><b>/</b><strong id="page-title">Dashboard</strong></div><div id="backend-status" class="backend-status offline">Backend offline</div>
+        <div class="breadcrumbs"><span>GM Tutoring</span><b>/</b><strong id="page-title">Dashboard</strong></div>
+        <div id="backend-status" class="backend-status offline">Backend offline</div>
         <div class="top-actions">
           <button class="btn btn-light" data-action="logout" type="button">Log out</button>
-          <button class="icon-btn notification-btn" data-action="notifications">♢<span class="notification-badge">4</span></button>
-          <button class="profile-menu" data-route="profile"><span class="avatar sm">GM</span><span class="desktop-only">GM Owner</span><span>⌄</span></button>
+          <button class="icon-btn notification-btn" data-action="notifications">♢<span
+              class="notification-badge">4</span></button>
+          <button class="profile-menu" data-route="profile"><span class="avatar sm">GM</span><span
+              class="desktop-only">GM Owner</span><span>⌄</span></button>
         </div>
       </header>
 
@@ -96,4 +102,5 @@
   <div id="modal-root"></div>
   <script src="app.js?v=5"></script>
 </body>
+
 </html>
