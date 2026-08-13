@@ -40,3 +40,14 @@ GM Tutoring backend running at http://localhost:4000
     phone: ''
   }
 }
+[REGISTER] attempt {
+  time: '2026-08-13T21:28:29.100Z',
+  ip: '::1',
+  headers: { 'content-type': 'application/json' },
+  body: {
+    name: 'Shaun Molewa',
+    email: 'mustafashaun987@gmail.com',
+    password: 'shaun101',
+    phone: ''
+  }
+}
