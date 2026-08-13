@@ -1,0 +1,42 @@
+GM Tutoring backend running at http://localhost:4000
+[REGISTER] attempt {
+  time: '2026-08-13T20:50:05.519Z',
+  ip: '::1',
+  headers: { 'content-type': 'application/json' },
+  body: {
+    name: 'Test User',
+    email: 'test@example.com',
+    password: 'password123'
+  }
+}
+[REGISTER] attempt {
+  time: '2026-08-13T20:53:17.105Z',
+  ip: '::1',
+  headers: { 'content-type': 'application/json' },
+  body: {
+    name: 'Test User',
+    email: 'final-verify-1786654397088@example.com',
+    password: 'password123'
+  }
+}
+[REGISTER] attempt {
+  time: '2026-08-13T21:01:04.306Z',
+  ip: '::1',
+  headers: { 'content-type': 'application/json' },
+  body: {
+    name: 'Final Check',
+    email: 'final-check-1786654864288@example.com',
+    password: 'password123'
+  }
+}
+[REGISTER] attempt {
+  time: '2026-08-13T21:05:22.837Z',
+  ip: '::1',
+  headers: { 'content-type': 'application/json' },
+  body: {
+    name: 'Shaun Molewa',
+    email: 'mustafashaun987@gmail.com',
+    password: 'Shaun.101',
+    phone: ''
+  }
+}

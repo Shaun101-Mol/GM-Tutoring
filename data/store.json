@@ -127,6 +127,60 @@
       "status": "Active",
       "phone": "+27728214859",
       "passwordHash": "c8cae958ded3526d8b8a03d2da0c7988:10716bda7613c0c0330c0006fc29be384cdba9a50fef1d8c87145d534c16fb02cdea616de656a04de020d8dd38ddb7f79722001a375a503a2e509fc6e9ccda08"
+    },
+    {
+      "id": "u_msrx0c7o_b3594e",
+      "name": "Fresh User",
+      "email": "freshuser@example.com",
+      "role": "learner",
+      "status": "Active",
+      "phone": "",
+      "passwordHash": "cda789cffb34aa6c8c023dfa2e1a0edd:794536132279e544cb5af56c3061adc9a7120731d02a11651147741c2108bb1aa472b35c2379f9554ab61ebb05e82e7f7e0d98e2e47680f44332e4b196617db5"
+    },
+    {
+      "id": "u_msrxc0wg_ba2114",
+      "name": "CORS Test",
+      "email": "corstest@example.com",
+      "role": "learner",
+      "status": "Active",
+      "phone": "",
+      "passwordHash": "394a0b186a7b21b9765cf055d1aeaaca:348c05c5819a2c5a8cf58ae0b07338b9599214832c3a988889c5e8e779f9f996fe642d8609c419fe24195d5c8cd3565749c2ef04f67610391afd575005507abc"
+    },
+    {
+      "id": "u_msrz1xn5_5e1825",
+      "name": "Test User",
+      "email": "test@example.com",
+      "role": "learner",
+      "status": "Active",
+      "phone": "",
+      "passwordHash": "562190ee4c87ccadd2c25955231b9949:031de49c5b73491f42f8be32e266efbd53830062477d2c4e00d86940c76ea4ed7a08a47f9be7506a29d7594515c7da99e758a8dbb297bd85e5d081d581715b35"
+    },
+    {
+      "id": "u_msrzwbsv_ff86fb",
+      "name": "Test User",
+      "email": "final-verify-1786654397088@example.com",
+      "role": "learner",
+      "status": "Active",
+      "phone": "",
+      "passwordHash": "d09743345f627e30a31c3b206e890c4c:ff45372e6f80bdc866b4053a4fac60cbaa07396cf134271c2c36cbcf1106d33a3dc761dc6e23715dc87f87bb5007c762fa4edf162715a796d14cf4ee20062879"
+    },
+    {
+      "id": "u_mss06cag_d8e3be",
+      "name": "Final Check",
+      "email": "final-check-1786654864288@example.com",
+      "role": "learner",
+      "status": "Active",
+      "phone": "",
+      "passwordHash": "4ce6a0abb15ea608ec5a41c39a46a980:a6c3c2278d384cd27eb236f30d4586d733bce8e4516b388ae776632be054d95409f55bad980a3d0e9df9615313f439afe73f7fb5f6f79d29d963ef039f697b56"
+    },
+    {
+      "id": "u_mss0bvt7_a319f8",
+      "name": "Shaun Molewa",
+      "email": "mustafashaun987@gmail.com",
+      "role": "learner",
+      "status": "Active",
+      "phone": "",
+      "passwordHash": "b21441e13c7f83ee3851f03f6747aa25:81d38ad617a19964c0153373ec76eab6c0871fdfcb0668917af75147a075801df1f042bd6552195f0773d2791461ea93b24c7e0da92b285083cf53873a4c901c"
     }
   ],
   "classes": [

@@ -6,7 +6,8 @@ This build connects the GM Tutoring frontend to the local Node.js backend and fi
 1. Install Node.js (Node 18+ recommended; Node 26 works).
 2. Open PowerShell in this folder.
 3. Run `node server.js`.
-4. Open http://localhost:3000 — do not open index.html directly.
+4. Open http://localhost:4000 — do not open index.html directly, and do not use VS Code Live Preview (it occupies ports 3000/3001 and will cause API 404s).
+NOTE: The backend listens on port 4000. Port 3000 is reserved for VS Code Live Preview, which does not serve the API. If you see `Request failed (404)` on signup or login, the node backend is not running — start it with `node server.js`.
 
 ## Demo accounts
 All demo accounts use password `Welcome123!`.
