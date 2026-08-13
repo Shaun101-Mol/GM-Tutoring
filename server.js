@@ -164,7 +164,14 @@ async function handle(req,res){
       return send(res,200,{ok:true,accepted:true,accountExists:exists});
     }
     if(p==='/api/auth/register'&&method==='POST'){
-      const body=await readJson(req);
+      let body;
+      try{
+        body=await readJson(req);
+      }catch(err){
+        console.error('[REGISTER] invalid JSON body',err.message);
+        return error(res,400,'Invalid JSON body.');
+      }
+      try{console.log('[REGISTER] attempt', {time:new Date().toISOString(),ip:req.socket.remoteAddress,headers:{'content-type':req.headers['content-type']||''},body});}catch(e){}
       const name=String(body.name||'').trim();
       const email=String(body.email||'').trim().toLowerCase();
       const password=String(body.password||'');
