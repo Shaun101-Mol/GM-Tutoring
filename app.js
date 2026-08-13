@@ -1,11 +1,69 @@
-/* GM Tutoring - full interactive frontend + Node.js API integration. */
+/* GM Tutoring - full interactive frontend + Node.js API integration with offline fallback. */
 const DATA_KEY = 'gm_tutoring_backend_v1';
 const TOKEN_KEY = 'gm_tutoring_access_token';
-const API_BASE = 'http://localhost:4000/api';
+const OFFLINE_USERS_KEY = 'gm_tutoring_offline_users';
+const OFFLINE_SESSION_KEY = 'gm_tutoring_offline_session';
+// Detect GitHub Pages / static hosting (no backend available) vs local dev
+const isStaticHost = window.location.hostname.includes('github.io') || window.location.protocol === 'file:';
+const API_BASE = isStaticHost ? '' : 'http://localhost:4000/api';
 const todayISO = new Date().toISOString().slice(0, 10);
 let syncTimer = null;
 let syncInFlight = Promise.resolve();
 let backendOnline = false;
+let offlineMode = false;
+
+class NetworkError extends Error { }
+
+// ---------- Offline (localStorage) user store ----------
+function loadOfflineUsers() { try { return JSON.parse(localStorage.getItem(OFFLINE_USERS_KEY)) || []; } catch { return []; } }
+function saveOfflineUsers(users) { localStorage.setItem(OFFLINE_USERS_KEY, JSON.stringify(users)); }
+function loadOfflineSession() { try { return JSON.parse(localStorage.getItem(OFFLINE_SESSION_KEY)) || null; } catch { return null; } }
+function saveOfflineSession(session) { if (session) localStorage.setItem(OFFLINE_SESSION_KEY, JSON.stringify(session)); else localStorage.removeItem(OFFLINE_SESSION_KEY); }
+function offlineHash(password) { let h = 5381; for (let i = 0; i < password.length; i++) h = ((h << 5) + h + password.charCodeAt(i)) | 0; return 'h' + (h >>> 0).toString(36); }
+function publicUser(u) { if (!u) return null; const x = { ...u }; delete x.passwordHash; return x; }
+function seedOfflineUsers() {
+  let users = loadOfflineUsers();
+  if (users.length) return users;
+  const passHash = offlineHash('Welcome123!');
+  users = seed.users.map(u => ({ ...u, passwordHash: passHash }));
+  saveOfflineUsers(users);
+  return users;
+}
+function offlineRegister(name, email, password, role, phone) {
+  const users = seedOfflineUsers();
+  if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) throw new Error('An account with that email already exists. Please sign in instead.');
+  const user = { id: 'u_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name, email, role, status: 'Active', phone: phone || '', passwordHash: offlineHash(password) };
+  users.push(user); saveOfflineUsers(users);
+  const token = 'offline_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+  saveOfflineSession({ token, userId: user.id });
+  return { token, user: publicUser(user) };
+}
+function offlineLogin(email, password, role) {
+  const users = seedOfflineUsers();
+  const found = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  if (!found || found.status !== 'Active' || (role && found.role !== role) || found.passwordHash !== offlineHash(password)) throw new Error('Invalid email, password, role, or inactive account.');
+  const token = 'offline_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+  saveOfflineSession({ token, userId: found.id });
+  return { token, user: publicUser(found) };
+}
+function offlineCurrentUser() {
+  const session = loadOfflineSession(); if (!session) return null;
+  return loadOfflineUsers().find(u => u.id === session.userId) || null;
+}
+function offlineLogout() { saveOfflineSession(null); }
+function enterApp(user, message) {
+  state = Object.assign(clone(seed), loadState());
+  const existing = state.users.find(u => u.id === user.id);
+  if (existing) Object.assign(existing, { name: user.name, email: user.email, role: user.role, status: user.status, phone: user.phone });
+  else state.users.push({ id: user.id, name: user.name, email: user.email, role: user.role, status: user.status, phone: user.phone });
+  state.currentRole = user.role;
+  state.currentUserId = user.id;
+  localStorage.setItem(DATA_KEY, JSON.stringify(state));
+  qs('#login-screen').classList.add('hidden');
+  qs('#app').classList.remove('hidden');
+  route = 'dashboard'; render();
+  toast(message);
+}
 
 async function api(path, options = {}) {
   const headers = new Headers(options.headers || {});
@@ -14,7 +72,7 @@ async function api(path, options = {}) {
   if (token) headers.set('Authorization', `Bearer ${token}`);
   let response;
   try { response = await fetch(API_BASE + path, { ...options, headers, cache: 'no-store' }); }
-  catch { throw new Error('Cannot reach the GM Tutoring server. Make sure `node server.js` is running.'); }
+  catch { throw new NetworkError('Cannot reach the GM Tutoring server. Make sure `node server.js` is running.'); }
   let payload = null;
   try { payload = await response.json(); } catch { }
   if (!response.ok) throw new Error(payload?.error || `Request failed (${response.status})`);
@@ -22,36 +80,49 @@ async function api(path, options = {}) {
 }
 
 async function checkBackend() {
-  try { await api('/health'); backendOnline = true; updateBackendBadge(); return true; }
-  catch { backendOnline = false; updateBackendBadge(); return false; }
+  if (isStaticHost) { backendOnline = false; offlineMode = true; updateBackendBadge(); return false; }
+  try { await api('/health'); backendOnline = true; offlineMode = false; updateBackendBadge(); return true; }
+  catch { backendOnline = false; offlineMode = true; updateBackendBadge(); return false; }
 }
-function updateBackendBadge() { const el = qs('#backend-status'); if (el) { el.textContent = backendOnline ? 'Backend connected' : 'Backend offline'; el.className = `backend-status ${backendOnline ? 'online' : 'offline'}`; } }
+function updateBackendBadge() { const el = qs('#backend-status'); if (el) { el.textContent = offlineMode ? 'Offline mode' : (backendOnline ? 'Backend connected' : 'Backend offline'); el.className = `backend-status ${backendOnline ? 'online' : 'offline'}`; } }
 function scheduleSync() {
-  if (!localStorage.getItem(TOKEN_KEY)) return;
+  if (!localStorage.getItem(TOKEN_KEY) || offlineMode) return;
   clearTimeout(syncTimer);
   syncTimer = setTimeout(() => {
     const payload = clone(state);
     syncInFlight = syncInFlight.then(async () => {
-      try { const result = await api('/state/sync', { method: 'PUT', body: JSON.stringify(payload) }); backendOnline = true; updateBackendBadge(); if (result.state) { state = Object.assign(state, result.state); localStorage.setItem(DATA_KEY, JSON.stringify(state)); } }
-      catch (err) { backendOnline = false; updateBackendBadge(); toast(err.message, 'error'); }
+      try { const result = await api('/state/sync', { method: 'PUT', body: JSON.stringify(payload) }); backendOnline = true; offlineMode = false; updateBackendBadge(); if (result.state) { state = Object.assign(state, result.state); localStorage.setItem(DATA_KEY, JSON.stringify(state)); } }
+      catch (err) { backendOnline = false; offlineMode = true; updateBackendBadge(); toast(err.message, 'error'); }
     });
   }, 120);
 }
 
 async function restoreBackendSession() {
   const token = localStorage.getItem(TOKEN_KEY);
-  if (!token) { await checkBackend(); return; }
-  try {
-    const [result, me] = await Promise.all([api('/state'), api('/me')]);
-    state = Object.assign(clone(seed), result);
-    state.currentRole = me.user.role;
-    state.currentUserId = me.user.id;
-    localStorage.setItem(DATA_KEY, JSON.stringify(state));
-    backendOnline = true;
-    qs('#login-screen').classList.add('hidden');
-    qs('#app').classList.remove('hidden');
-    route = 'dashboard'; render();
-  } catch { localStorage.removeItem(TOKEN_KEY); backendOnline = false; updateBackendBadge(); }
+  const offlineUser = offlineCurrentUser();
+  if (!token && !offlineUser) { await checkBackend(); return; }
+  if (!isStaticHost && token) {
+    try {
+      const [result, me] = await Promise.all([api('/state'), api('/me')]);
+      state = Object.assign(clone(seed), result);
+      state.currentRole = me.user.role;
+      state.currentUserId = me.user.id;
+      localStorage.setItem(DATA_KEY, JSON.stringify(state));
+      backendOnline = true; offlineMode = false;
+      qs('#login-screen').classList.add('hidden');
+      qs('#app').classList.remove('hidden');
+      route = 'dashboard'; render();
+      updateBackendBadge();
+      return;
+    } catch { /* fall through to offline session */ }
+  }
+  if (offlineUser) {
+    enterApp(offlineUser, 'Welcome back.');
+    offlineMode = true; backendOnline = false; updateBackendBadge();
+    return;
+  }
+  localStorage.removeItem(TOKEN_KEY);
+  offlineMode = true; backendOnline = false; updateBackendBadge();
   await checkBackend();
 }
 
@@ -162,7 +233,7 @@ function loadState() { try { const saved = JSON.parse(localStorage.getItem(DATA_
 function saveState(options = {}) { localStorage.setItem(DATA_KEY, JSON.stringify(state)); if (!options.skipSync) scheduleSync(); }
 function qs(s, root = document) { return root.querySelector(s) }
 function qsa(s, root = document) { return [...root.querySelectorAll(s)] }
-function esc(v) { return String(v ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m])) }
+function esc(v) { return String(v ?? '').replace(/[&<>"']/g, m => ({ '&': '&', '<': '<', '>': '>', '"': '"', "'": '&#039;' }[m])) }
 function initials(name) { return String(name || 'GM').split(/\s+/).map(x => x[0]).join('').slice(0, 2).toUpperCase() }
 function uid(prefix) { return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 6) }
 function user(id) { return state.users.find(x => x.id === id) }
@@ -288,7 +359,7 @@ function filterClasses() { const q = (qs('#class-search')?.value || '').toLowerC
 function modal(title, body, foot = '') { qs('#modal-root').innerHTML = `<div class="modal-backdrop"><div class="modal" role="dialog" aria-modal="true"><div class="modal-head"><h3>${title}</h3><button class="icon-btn" aria-label="Close" data-action="close-modal">✕</button></div><div class="modal-body">${body}</div>${foot ? `<div class="modal-foot">${foot}</div>` : ''}</div></div>`; const first = qs('#modal-root input, #modal-root textarea, #modal-root select'); if (first) setTimeout(() => first.focus(), 50) }
 function closeModal() { if (qs('.live-room')) { if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop(); if (screenShareStream) { screenShareStream.getTracks().forEach(t => t.stop()); screenShareStream = null; } if (liveMediaStream) { liveMediaStream.getTracks().forEach(t => t.stop()); liveMediaStream = null; } stopLiveTimer(); } qs('#modal-root').innerHTML = '' }
 function showSignup() {
-  modal('Create Learner Account', `<p class="muted">Create a real local GM Tutoring learner account using your own email address. No external email verification is required in this development build.</p><div class="form-grid"><div class="field span-2"><label>Full name<input id="signup-name" required placeholder="Your full name"></label></div><div class="field span-2"><label>Email address<input id="signup-email" type="email" required placeholder="you@example.com"></label></div><div class="field"><label>Password<input id="signup-password" type="password" minlength="8" required placeholder="At least 8 characters"></label></div><div class="field"><label>Confirm password<input id="signup-confirm" type="password" minlength="8" required></label></div><div class="field span-2"><label>Phone (optional)<input id="signup-phone" placeholder="+27 ..."></label></div></div>`, `${button('Cancel', 'close-modal', 'light')}${button('Create Account', 'create-account', 'primary')}`);
+  modal('Create Account', `<p class="muted">Create a GM Tutoring account and choose your role. Accounts are stored locally in your browser when the backend is offline.</p><div class="form-grid"><div class="field"><label>Account role<select id="signup-role"><option value="learner">Learner</option><option value="tutor">Tutor</option><option value="admin">Administrator</option></select></label></div><div class="field"><label>Full name<input id="signup-name" required placeholder="Your full name"></label></div><div class="field"><label>Email address<input id="signup-email" type="email" required placeholder="you@example.com"></label></div><div class="field"><label>Password<input id="signup-password" type="password" minlength="8" required placeholder="At least 8 characters"></label></div><div class="field"><label>Confirm password<input id="signup-confirm" type="password" minlength="8" required></label></div><div class="field span-2"><label>Phone (optional)<input id="signup-phone" placeholder="+27 ..."></label></div></div>`, `${button('Cancel', 'close-modal', 'light')}${button('Create Account', 'create-account', 'primary')}`);
 }
 function showNewClass() { modal('Create Classroom', `<div class="form-grid"><div class="field"><label>Classroom name<input id="m-class-name" required placeholder="Grade 12 Mathematics"></label></div><div class="field"><label>Subject<select id="m-class-sub"><option>Mathematics</option><option>Physical Sciences</option><option>Accounting</option><option>English</option><option>Life Sciences</option></select></label></div><div class="field"><label>Grade<select id="m-class-grade"><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option><option>Grade 11</option><option>Grade 12</option></select></label></div><div class="field"><label>Assign tutor<select id="m-class-tutor"><option value="">Unassigned</option>${state.users.filter(u => u.role === 'tutor' && u.status === 'Active').map(u => `<option value="${u.id}">${esc(u.name)}</option>`).join('')}</select></label></div></div>`, `${button('Cancel', 'close-modal', 'light')}${button('Create Classroom', 'create-class', 'primary')}`) }
 function showNewUser() { modal('Add User', `<div class="form-grid"><div class="field"><label>Full name<input id="m-user-name" required placeholder="New user"></label></div><div class="field"><label>Email<input id="m-user-email" type="email" required placeholder="user@example.com"></label></div><div class="field"><label>Role<select id="m-user-role"><option value="tutor">Tutor</option><option value="learner">Learner</option></select></label></div><div class="field"><label>Initial password<input id="m-user-pass" type="text" value="Welcome123!"></label></div><div class="field span-2"><label>Phone<input id="m-user-phone" placeholder="+27 ..."></label></div></div>`, `${button('Cancel', 'close-modal', 'light')}${button('Create User', 'create-user', 'primary')}`) }
@@ -438,7 +509,7 @@ document.addEventListener('click', e => {
   const settingTab = e.target.closest('[data-setting-tab]'); if (settingTab) { state.activeSettingTab = settingTab.dataset.settingTab; saveState(); render(); return }
   const live = e.target.closest('[data-live]'); if (live) { handleLiveControl(live.dataset.live); return }
   const action = e.target.closest('[data-action]'); if (!action) return; const a = action.dataset.action;
-  if (a === 'logout') { stopLiveTimer(); api('/auth/logout', { method: 'POST' }).catch(() => { }).finally(() => { localStorage.removeItem(TOKEN_KEY); localStorage.removeItem(DATA_KEY); qs('#app').classList.add('hidden'); qs('#login-screen').classList.remove('hidden'); closeModal(); toast('You have been signed out.'); }); return }
+  if (a === 'logout') { stopLiveTimer(); offlineLogout(); api('/auth/logout', { method: 'POST' }).catch(() => { }).finally(() => { localStorage.removeItem(TOKEN_KEY); localStorage.removeItem(DATA_KEY); qs('#app').classList.add('hidden'); qs('#login-screen').classList.remove('hidden'); closeModal(); toast('You have been signed out.'); }); return }
   if (a === 'toggle-sidebar') { qs('.sidebar').classList.toggle('open'); return }
   if (a === 'toggle-password') { const p = qs('#login-password'); p.type = p.type === 'password' ? 'text' : 'password'; return }
   if (a === 'signup') { showSignup(); return }
@@ -446,7 +517,7 @@ document.addEventListener('click', e => {
   if (a === 'notifications') { showNotifications(); return }
   if (a === 'close-modal') { closeModal(); return }
   if (a === 'close-live') { handleLiveControl('close-live'); return }
-  if (a === 'create-account') { const name = qs('#signup-name')?.value.trim(), email = qs('#signup-email')?.value.trim(), password = qs('#signup-password')?.value, confirm = qs('#signup-confirm')?.value, phone = qs('#signup-phone')?.value.trim(); if (!name || !email || !password) { toast('Complete the required fields.', 'error'); return } if (password !== confirm) { toast('Passwords do not match.', 'error'); return } if (password.length < 8) { toast('Password must be at least 8 characters.', 'error'); return } api('/auth/register', { method: 'POST', body: JSON.stringify({ name, email, password, phone }) }).then(result => { localStorage.setItem(TOKEN_KEY, result.token); state = Object.assign(clone(seed), result.state); state.currentRole = 'learner'; state.currentUserId = result.user.id; localStorage.setItem(DATA_KEY, JSON.stringify(state)); closeModal(); qs('#login-screen').classList.add('hidden'); qs('#app').classList.remove('hidden'); route = 'dashboard'; backendOnline = true; updateBackendBadge(); render(); toast('Learner account created successfully.'); }).catch(err => toast(err.message, 'error')); return }
+  if (a === 'create-account') { const name = qs('#signup-name')?.value.trim(), email = qs('#signup-email')?.value.trim(), password = qs('#signup-password')?.value, confirm = qs('#signup-confirm')?.value, phone = qs('#signup-phone')?.value.trim(); const role = qs('#signup-role')?.value || 'learner'; if (!name || !email || !password) { toast('Complete the required fields.', 'error'); return } if (password !== confirm) { toast('Passwords do not match.', 'error'); return } if (password.length < 8) { toast('Password must be at least 8 characters.', 'error'); return } const doRegister = () => { if (isStaticHost || offlineMode) { try { const result = offlineRegister(name, email, password, role, phone); enterApp(result.user, 'Account created successfully.'); } catch (err) { toast(err.message, 'error'); } return; } api('/auth/register', { method: 'POST', body: JSON.stringify({ name, email, password, phone, role }) }).then(result => { localStorage.setItem(TOKEN_KEY, result.token); enterApp(result.user, 'Account created successfully.'); backendOnline = true; offlineMode = false; updateBackendBadge(); }).catch(err => { if (err instanceof NetworkError) { try { const result = offlineRegister(name, email, password, role, phone); enterApp(result.user, 'Account created successfully.'); } catch (e2) { toast(e2.message, 'error'); } } else toast(err.message, 'error'); }); }; doRegister(); return }
   if (a === 'new-class') { if (guard('create')) showNewClass(); return }
   if (a === 'new-user') { if (guard('create')) showNewUser(); return }
   if (a === 'new-activity') { if (guard('create')) showNewActivity(); return }
@@ -519,7 +590,7 @@ document.addEventListener('click', e => {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && qs('#modal-root').innerHTML) closeModal(); if (e.key === 'Enter' && e.target.id === 'chat-input') qs('[data-action="send-chat"]')?.click() });
 
-qs('#login-form').addEventListener('submit', async e => { e.preventDefault(); const email = qs('#login-email').value.trim(); const password = qs('#login-password').value; try { const result = await api('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }); localStorage.setItem(TOKEN_KEY, result.token); state = Object.assign(clone(seed), result.state); state.currentRole = result.user.role; state.currentUserId = result.user.id; localStorage.setItem(DATA_KEY, JSON.stringify(state)); qs('#login-screen').classList.add('hidden'); qs('#app').classList.remove('hidden'); route = 'dashboard'; backendOnline = true; updateBackendBadge(); render(); toast(`Signed in as ${roleNames[result.user.role]}.`); } catch (err) { toast(err.message, 'error') } });
+qs('#login-form').addEventListener('submit', async e => { e.preventDefault(); const email = qs('#login-email').value.trim(); const password = qs('#login-password').value; const role = qs('#login-role')?.value || ''; try { if (isStaticHost || offlineMode) { const result = offlineLogin(email, password, role); enterApp(result.user, `Signed in as ${roleNames[result.user.role]}.`); return; } const result = await api('/auth/login', { method: 'POST', body: JSON.stringify({ email, password, role: role || undefined }) }); localStorage.setItem(TOKEN_KEY, result.token); enterApp(result.user, `Signed in as ${roleNames[result.user.role]}.`); backendOnline = true; offlineMode = false; updateBackendBadge(); } catch (err) { if (err instanceof NetworkError) { try { const result = offlineLogin(email, password, role); enterApp(result.user, `Signed in as ${roleNames[result.user.role]}.`); } catch { toast(err.message, 'error'); } } else { toast(err.message, 'error'); } } });
 
 
 restoreBackendSession();

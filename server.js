@@ -179,7 +179,10 @@ async function handle(req, res) {
       if (!/^\S+@\S+\.\S+$/.test(email)) return error(res, 400, 'Please enter a valid email address.');
       if (password.length < 8) return error(res, 400, 'Password must be at least 8 characters.');
       if (store.users.some(u => u.email.toLowerCase() === email)) return error(res, 409, 'An account with that email already exists. Please sign in instead.');
-      const u = { id: uid('u'), name, email, role: 'learner', status: 'Active', phone: String(body.phone || ''), passwordHash: makePassword(password) };
+      const allowedRoles = ['admin', 'tutor', 'learner'];
+      const requestedRole = String(body.role || 'learner').toLowerCase();
+      const role = allowedRoles.includes(requestedRole) ? requestedRole : 'learner';
+      const u = { id: uid('u'), name, email, role, status: 'Active', phone: String(body.phone || ''), passwordHash: makePassword(password) };
       store.users.push(u); saveStore();
       const token = crypto.randomBytes(32).toString('hex'); sessions.set(token, u.id);
       return send(res, 201, { token, user: publicUser(u), state: publicState() });
