@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GM Tutoring secure online learning platform">
+  <title>GM Tutoring | Learning Platform</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="toast-root"></div>
+
+  <div id="login-screen" class="login-screen">
+    <div class="login-art">
+      <div class="login-brand">
+        <img src="assets/gm-tutoring-logo.jpeg" alt="GM Tutoring logo">
+      </div>
+      <div class="login-copy">
+        <span class="eyebrow">ONLINE LEARNING PLATFORM</span>
+        <h1>Unleash your<br><span>inner genius.</span></h1>
+        <p>One secure platform for classrooms, tutors, learners, live lessons and academic progress.</p>
+        <div class="login-stats">
+          <div><strong>150+</strong><span>Learners</span></div>
+          <div><strong>10</strong><span>Tutors</span></div>
+          <div><strong>15</strong><span>Active Classes</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-panel">
+      <div class="mobile-logo"><img src="assets/gm-tutoring-logo.jpeg" alt="GM Tutoring"></div>
+      <div class="login-box">
+        <span class="eyebrow">WELCOME BACK</span>
+        <h2>Sign in to GM Tutoring</h2>
+        <p class="muted">Use a demo role or sign in with an account you have registered.</p>
+
+        <form id="login-form">
+          <label>Email
+            <input id="login-email" type="email" placeholder="you@gmtutoring.co.za" required>
+          </label>
+          <label>Password
+            <div class="password-field">
+              <input id="login-password" type="password" placeholder="••••••••" required>
+              <button type="button" class="icon-btn" data-action="toggle-password">◉</button>
+            </div>
+          </label>
+          <div class="login-options">
+            <label class="check"><input type="checkbox" checked> Remember me</label>
+            <a href="#" data-action="forgot">Forgot password?</a>
+          </div>
+          <button class="btn btn-primary btn-lg full" type="submit">Sign In <span>→</span></button>
+        <button class="text-link auth-signup" type="button" data-action="signup">New learner? Create an account →</button>
+        </form>
+
+        <div class="demo-title">QUICK DEMO ACCESS</div>
+        <div class="demo-grid">
+          <button class="demo-card active" data-role="admin"><b>Administrator</b><small>Full platform control</small></button>
+          <button class="demo-card" data-role="tutor"><b>Tutor</b><small>Assigned classrooms</small></button>
+          <button class="demo-card" data-role="learner"><b>Learner</b><small>My learning space</small></button>
+        </div>
+        <p class="login-foot">Demo mode · Data is stored locally in your browser.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="app" class="app hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img src="assets/gm-tutoring-logo.jpeg" alt="GM Tutoring">
+        <div><strong>GM</strong><span>TUTORING</span></div>
+      </div>
+
+      <div class="role-pill"><span class="status-dot"></span><span id="role-label">Super Administrator</span></div>
+
+      <nav id="main-nav" class="nav"></nav>
+
+      <div class="sidebar-bottom">
+        <button class="nav-item" data-route="settings"><span>⚙</span> Settings</button>
+        <button class="nav-item" data-action="logout"><span>↪</span> Sign out</button>
+        <div class="sidebar-user">
+          <div class="avatar" id="side-avatar">GM</div>
+          <div><strong id="side-name">GM Owner</strong><small id="side-email">owner@gmtutoring.co.za</small></div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu icon-btn" data-action="toggle-sidebar">☰</button>
+        <div class="breadcrumbs"><span>GM Tutoring</span><b>/</b><strong id="page-title">Dashboard</strong></div><div id="backend-status" class="backend-status offline">Backend offline</div>
+        <div class="top-actions">
+          <button class="icon-btn notification-btn" data-action="notifications">♢<span class="notification-badge">4</span></button>
+          <button class="profile-menu" data-route="profile"><span class="avatar sm">GM</span><span class="desktop-only">GM Owner</span><span>⌄</span></button>
+        </div>
+      </header>
+
+      <section id="page" class="page"></section>
+    </main>
+  </div>
+
+  <div id="modal-root"></div>
+  <script src="app.js?v=5"></script>
+</body>
+</html>
