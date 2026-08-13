@@ -1,0 +1,550 @@
+{
+  "currentRole": "admin",
+  "currentUserId": "u1",
+  "users": [
+    {
+      "id": "u1",
+      "name": "GM Owner",
+      "email": "owner@gmtutoring.co.za",
+      "role": "admin",
+      "status": "Active",
+      "phone": "+27 71 000 0000",
+      "passwordHash": "ff33c427e8fe0a7dbf050749ed2bb008:d02b7db8780948b75b4f92c389c4850d9594a7b8f64a3e84b7c6b2bfa89174ddfa70c38722d923de00761b5e0397d95e1d0ad6cd26009727e6a5e0934d1b8f12"
+    },
+    {
+      "id": "u2",
+      "name": "Thandi Mokoena",
+      "email": "thandi@gmtutoring.co.za",
+      "role": "tutor",
+      "status": "Active",
+      "phone": "+27 72 111 1111",
+      "passwordHash": "d4497ebeef1358beb66136381589b237:8d38f5743d134badcdae85e7857d30595a506eca048427dc86b13e96682fdf16674299736c000e4ea623f98e89887580967ba146a153516aeafce4228681a9c3"
+    },
+    {
+      "id": "u3",
+      "name": "Daniel Naidoo",
+      "email": "daniel@gmtutoring.co.za",
+      "role": "tutor",
+      "status": "Active",
+      "phone": "+27 73 222 2222",
+      "passwordHash": "30e5ea63fcd7f770bf1892be27abbf96:a69b258a66c9e03eb5abc6ebbbf458af55bb8276bbb7d12e0b7aa85f4b3e8e876093db7a118dee1ccff19ace092301ba73f3fb585b0e1b96ab00625601dc78c8"
+    },
+    {
+      "id": "u4",
+      "name": "Lerato Molefe",
+      "email": "lerato@student.co.za",
+      "role": "learner",
+      "status": "Active",
+      "phone": "+27 74 333 3333",
+      "passwordHash": "5c31900c26bd3a13450f9cf30cc6e1b4:0f53241fd92b828958921490727f29e1e470df0e7b869d75aae63437bb395dc4cc8659bf6206bcc984333f6a86603a3fb466594cdfde2223591b6929e64eee29"
+    },
+    {
+      "id": "u5",
+      "name": "Sipho Dlamini",
+      "email": "sipho@student.co.za",
+      "role": "learner",
+      "status": "Active",
+      "phone": "+27 75 444 4444",
+      "passwordHash": "8c1305494f8e3b364ea9299cd967599f:af449d36e1c10567960f78f613e6d90a7928c346c00142b8994ad20fd716e3b64ac2282663cc964ea167a59023f6f9b574838913c0f5ac3cfb7c8d2e5749b93e"
+    },
+    {
+      "id": "u6",
+      "name": "Aisha Khan",
+      "email": "aisha@student.co.za",
+      "role": "learner",
+      "status": "Active",
+      "phone": "+27 76 555 5555",
+      "passwordHash": "369f39c642dc71929280ce9eb38da839:60845f4993c4f42a2d7b159cd014a49a96d39d4dc50a38ba2e1e82e12393b30f5092cf183fc32a6356c0cba648588fc4b83a38dc133fe36dc584779190c970b1"
+    },
+    {
+      "id": "u7",
+      "name": "Neo Ramokgopa",
+      "email": "neo@student.co.za",
+      "role": "learner",
+      "status": "Active",
+      "phone": "+27 77 666 6666",
+      "passwordHash": "d34236c264b0bbe5269bcb85fe1ec2cf:bbe4c9e2153c8e3913e3e800ff55f6f452cb1e2a543d213a69743345c2e3712290ca90bdd84ca228fbd8a8584ac110c19440e7c2f13485ae31e514a7df2adccb"
+    },
+    {
+      "id": "u_msm3ajui_9937a4",
+      "name": "Test Learner",
+      "email": "test-learner-20260809@example.com",
+      "role": "learner",
+      "status": "Active",
+      "phone": "",
+      "passwordHash": "03dc0c10d88e433d6b7c57ab00f234f3:d19b4b0afb1851d86bbb645746caac9cbf51ab857382603872a0d3d4b5e0304a3da1fa9cc02a156e2b31b6c2590957b6d4a1c65e2b34ab9262e1522351549f63"
+    },
+    {
+      "id": "u_msrq51v1_6da381",
+      "name": "Test User",
+      "email": "testuser+543250027@example.local",
+      "role": "learner",
+      "status": "Active",
+      "phone": "",
+      "passwordHash": "9b75ff33009454e5a4d2e5ce2e9dfac5:dc571ddaa05360660591125f604da1080c36462ce57f33f9d3eaf2bfb42f4520e312da51dd972b90988db4abb3809f1741b6c48abbb845d479677125fd673f43"
+    },
+    {
+      "id": "u_msrsnkey_435616",
+      "name": "Test User",
+      "email": "testuser@example.com",
+      "role": "learner",
+      "status": "Active",
+      "phone": "+27123456789",
+      "passwordHash": "2cc3500405dc0aa15a3a958c5296933f:33ef399bbd1a463e8b9dde9ac7ef2da8088cb85e7cc80cc89c8fa74069f00ef0fc21335e479eb840b6d91db860f962fa77bc1f8b95bb33dd153c3f1cf03a96c2"
+    },
+    {
+      "id": "u_msrsvyg1_2db986",
+      "name": "Sync Check",
+      "email": "synccheck-1786642610134@example.com",
+      "role": "learner",
+      "status": "Active",
+      "phone": "+27123456789",
+      "passwordHash": "56899921a230435f21befa4db51587bd:d14c3398278634aa99519a8eb0d809444dedff064ee0d826a1a36b4aad9b1840d3d8ba578f01a8d47ad1b3257698b15ebdf664752900350ec1d838e0f57e3fdb"
+    },
+    {
+      "id": "u_msrt28uf_55199e",
+      "name": "Test Signup Flow",
+      "email": "signupflow@example.com",
+      "role": "learner",
+      "status": "Active",
+      "phone": "+27123456789",
+      "passwordHash": "6cd8e72e38a723c8ec56fe35123203c9:ba5f60df51c7b92c92d9b21fc64bb19d542036b46e46b7831f7dd37ea9e3581e9c0ffab166bd46974cf282722cbf883013fd62086b4e9d5ea142241ebcab4491"
+    },
+    {
+      "id": "u_msrt4bd9_d3b9e4",
+      "name": "Sync Check",
+      "email": "synccheck-1786643012024@example.com",
+      "role": "learner",
+      "status": "Active",
+      "phone": "+27123456789",
+      "passwordHash": "6a78b100369bedb171a21237084a6bca:c53831cdb41eb6c84d73574b876e074cac065370af0f871905b8d1e993ac77f896aedce1274f072bbbc26b026f71ecb14ea7d64a8b7b7e9762d5491c0455beb9"
+    },
+    {
+      "id": "u_msrueek2_5d8543",
+      "name": "Shaun molewa",
+      "email": "you@example.com",
+      "role": "learner",
+      "status": "Active",
+      "phone": "+27728214859",
+      "passwordHash": "c8cae958ded3526d8b8a03d2da0c7988:10716bda7613c0c0330c0006fc29be384cdba9a50fef1d8c87145d534c16fb02cdea616de656a04de020d8dd38ddb7f79722001a375a503a2e509fc6e9ccda08"
+    }
+  ],
+  "classes": [
+    {
+      "id": "c1",
+      "name": "Grade 12 Mathematics",
+      "subject": "Mathematics",
+      "grade": "Grade 12",
+      "tutorId": "u2",
+      "learners": [
+        "u4",
+        "u5",
+        "u6",
+        "u7"
+      ],
+      "progress": 78,
+      "next": "Today · 18:00",
+      "status": "Active"
+    },
+    {
+      "id": "c2",
+      "name": "Grade 11 Physical Sciences",
+      "subject": "Physical Sciences",
+      "grade": "Grade 11",
+      "tutorId": "u3",
+      "learners": [
+        "u5",
+        "u7"
+      ],
+      "progress": 69,
+      "next": "Today · 19:00",
+      "status": "Active"
+    },
+    {
+      "id": "c3",
+      "name": "Grade 10 Mathematics",
+      "subject": "Mathematics",
+      "grade": "Grade 10",
+      "tutorId": "u2",
+      "learners": [
+        "u6"
+      ],
+      "progress": 84,
+      "next": "Tomorrow · 16:30",
+      "status": "Active"
+    },
+    {
+      "id": "c4",
+      "name": "Grade 8 Mathematics",
+      "subject": "Mathematics",
+      "grade": "Grade 8",
+      "tutorId": "u3",
+      "learners": [
+        "u7"
+      ],
+      "progress": 72,
+      "next": "Wed · 17:00",
+      "status": "Active"
+    },
+    {
+      "id": "c5",
+      "name": "Grade 12 Accounting",
+      "subject": "Accounting",
+      "grade": "Grade 12",
+      "tutorId": "u2",
+      "learners": [
+        "u4"
+      ],
+      "progress": 81,
+      "next": "Thu · 18:30",
+      "status": "Active"
+    },
+    {
+      "id": "c6",
+      "name": "Grade 11 Mathematics",
+      "subject": "Mathematics",
+      "grade": "Grade 11",
+      "tutorId": "u3",
+      "learners": [
+        "u5"
+      ],
+      "progress": 75,
+      "next": "Fri · 17:30",
+      "status": "Active"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "s1",
+      "classId": "c1",
+      "title": "Trigonometric identities",
+      "date": "2026-08-09",
+      "start": "18:00",
+      "end": "19:00",
+      "tutorId": "u2",
+      "status": "Completed",
+      "recording": true,
+      "startedAt": "2026-08-09T17:08:02.818Z"
+    },
+    {
+      "id": "s2",
+      "classId": "c2",
+      "title": "Newton's Laws",
+      "date": "2026-08-09",
+      "start": "19:00",
+      "end": "20:00",
+      "tutorId": "u3",
+      "status": "Scheduled",
+      "recording": true
+    },
+    {
+      "id": "s3",
+      "classId": "c3",
+      "title": "Algebraic fractions",
+      "date": "2026-08-09",
+      "start": "16:30",
+      "end": "17:30",
+      "tutorId": "u2",
+      "status": "Scheduled",
+      "recording": false
+    },
+    {
+      "id": "smsm3ho82oos7",
+      "classId": "c1",
+      "title": "Live tutoring lesson",
+      "date": "2026-08-09",
+      "start": "18:00",
+      "end": "19:00",
+      "tutorId": "u2",
+      "status": "Scheduled",
+      "recording": true
+    }
+  ],
+  "activities": [
+    {
+      "id": "a1",
+      "title": "Double Angle Identities",
+      "classId": "c1",
+      "due": "2026-08-15",
+      "submissions": 18,
+      "total": 28,
+      "status": "Open",
+      "instructions": "Complete questions 1–12 and show all working."
+    },
+    {
+      "id": "a2",
+      "title": "Newton's Laws Practice",
+      "classId": "c2",
+      "due": "2026-08-17",
+      "submissions": 12,
+      "total": 24,
+      "status": "Open",
+      "instructions": "Answer all force and acceleration questions."
+    },
+    {
+      "id": "a3",
+      "title": "Algebraic Fractions",
+      "classId": "c3",
+      "due": "2026-08-20",
+      "submissions": 27,
+      "total": 31,
+      "status": "Open",
+      "instructions": "Simplify each expression and explain your method."
+    },
+    {
+      "id": "a4",
+      "title": "Financial Statements Quiz",
+      "classId": "c5",
+      "due": "2026-08-22",
+      "submissions": 8,
+      "total": 22,
+      "status": "Draft",
+      "instructions": "Short quiz on financial statement interpretation."
+    }
+  ],
+  "submissions": [
+    {
+      "id": "sub1",
+      "activityId": "a1",
+      "learnerId": "u4",
+      "filename": "lerato_double_angle.pdf",
+      "mark": 82,
+      "feedback": "Good working. Check question 9.",
+      "storedName": null
+    },
+    {
+      "id": "sub2",
+      "activityId": "a1",
+      "learnerId": "u5",
+      "filename": "sipho_double_angle.pdf",
+      "mark": null,
+      "feedback": "",
+      "storedName": null
+    }
+  ],
+  "announcements": [
+    {
+      "id": "n1",
+      "title": "Grade 12 Mathematics class will take place on Thursday at 18:00.",
+      "audience": "c1",
+      "time": "2 hours ago"
+    },
+    {
+      "id": "n2",
+      "title": "New revision pack: Trigonometric identities is now available.",
+      "audience": "c1",
+      "time": "Yesterday"
+    },
+    {
+      "id": "n3",
+      "title": "Term 3 attendance reports are ready for review.",
+      "audience": "all",
+      "time": "2 days ago"
+    }
+  ],
+  "attendance": [
+    {
+      "id": "att1",
+      "learnerId": "u4",
+      "classId": "c1",
+      "date": "2026-08-12",
+      "status": "Present",
+      "tutorId": "u2"
+    },
+    {
+      "id": "att2",
+      "learnerId": "u5",
+      "classId": "c2",
+      "date": "2026-08-12",
+      "status": "Present",
+      "tutorId": "u3"
+    },
+    {
+      "id": "att3",
+      "learnerId": "u6",
+      "classId": "c3",
+      "date": "2026-08-12",
+      "status": "Absent",
+      "tutorId": "u2"
+    },
+    {
+      "id": "att4",
+      "learnerId": "u4",
+      "classId": "c1",
+      "date": "2026-08-14",
+      "status": "Present",
+      "tutorId": "u2"
+    },
+    {
+      "id": "att5",
+      "learnerId": "u5",
+      "classId": "c2",
+      "date": "2026-08-14",
+      "status": "Absent",
+      "tutorId": "u3"
+    },
+    {
+      "id": "att6",
+      "learnerId": "u6",
+      "classId": "c3",
+      "date": "2026-08-14",
+      "status": "Present",
+      "tutorId": "u2"
+    }
+  ],
+  "recordings": [
+    {
+      "id": "r1",
+      "classId": "c2",
+      "title": "Newton's Laws",
+      "date": "2026-08-12",
+      "duration": "54 min",
+      "tutorId": "u3"
+    },
+    {
+      "id": "r2",
+      "classId": "c1",
+      "title": "Differentiation",
+      "date": "2026-08-12",
+      "duration": "61 min",
+      "tutorId": "u2"
+    },
+    {
+      "id": "r3",
+      "classId": "c3",
+      "title": "Quadratic Functions",
+      "date": "2026-08-12",
+      "duration": "48 min",
+      "tutorId": "u2"
+    }
+  ],
+  "materials": [
+    {
+      "id": "m1",
+      "classId": "c1",
+      "name": "Trigonometric Identities Revision Pack.pdf",
+      "type": "PDF",
+      "size": "2.4 MB",
+      "date": "2026-08-08",
+      "storedName": null
+    },
+    {
+      "id": "m2",
+      "classId": "c1",
+      "name": "Formula Sheet.pdf",
+      "type": "PDF",
+      "size": "680 KB",
+      "date": "2026-08-07",
+      "storedName": null
+    },
+    {
+      "id": "m3",
+      "classId": "c2",
+      "name": "Newton's Laws Notes.pdf",
+      "type": "PDF",
+      "size": "1.1 MB",
+      "date": "2026-08-06",
+      "storedName": null
+    }
+  ],
+  "payments": [
+    {
+      "id": "p1",
+      "learnerId": "u4",
+      "amount": 950,
+      "status": "Paid",
+      "date": "2026-08-01",
+      "method": "EFT"
+    },
+    {
+      "id": "p2",
+      "learnerId": "u5",
+      "amount": 950,
+      "status": "Outstanding",
+      "date": "2026-08-01",
+      "method": "—"
+    },
+    {
+      "id": "p3",
+      "learnerId": "u6",
+      "amount": 950,
+      "status": "Paid",
+      "date": "2026-08-02",
+      "method": "Card"
+    }
+  ],
+  "referrals": [
+    {
+      "id": "ref1",
+      "name": "Thapelo",
+      "code": "THAP10",
+      "learners": 7,
+      "commission": 1050,
+      "bonusRemaining": 3
+    },
+    {
+      "id": "ref2",
+      "name": "Naledi",
+      "code": "NALEDI5",
+      "learners": 4,
+      "commission": 600,
+      "bonusRemaining": 6
+    }
+  ],
+  "parents": [
+    {
+      "id": "par1",
+      "name": "Mpho Molefe",
+      "email": "mpho@example.com",
+      "learnerId": "u4",
+      "status": "Active"
+    },
+    {
+      "id": "par2",
+      "name": "David Dlamini",
+      "email": "david@example.com",
+      "learnerId": "u5",
+      "status": "Active"
+    },
+    {
+      "id": "par3",
+      "name": "Ayesha Khan",
+      "email": "ayesha@example.com",
+      "learnerId": "u6",
+      "status": "Pending"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "x1",
+      "title": "Attendance report ready",
+      "body": "Term 3 attendance reports are ready for review.",
+      "time": "2 hrs ago",
+      "read": false
+    },
+    {
+      "id": "x2",
+      "title": "New submission",
+      "body": "Lerato Molefe submitted an activity.",
+      "time": "3 hrs ago",
+      "read": false
+    },
+    {
+      "id": "x3",
+      "title": "Announcement posted",
+      "body": "A new classroom announcement was posted.",
+      "time": "Yesterday",
+      "read": false
+    }
+  ],
+  "settings": {
+    "ownership": true,
+    "twoFactor": true,
+    "tutorAlerts": true,
+    "autoRecord": false,
+    "emailNotifications": true,
+    "smsNotifications": false,
+    "darkMode": false
+  },
+  "activeSettingTab": "General"
+}
